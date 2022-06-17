@@ -139,6 +139,7 @@ public:
     //     }
     // }
 
+private:
     CIVector<Particle> m_objects;
     CIVector<LinkConstraint> m_constraints;
 };

@@ -35,7 +35,7 @@ public:
         for (Wind &w : m_wind_waves)
         {
             w.update(dt);
-            for (Particle &p : scene.m_objects)
+            for (Particle &p : scene.objects())
             {
                 if (w.m_rect.contains(p.m_position))
                 {

@@ -62,8 +62,8 @@ int main()
         if (erasing)
         {
             // Delete all nodes that are in the range of the mouse
-            scene.m_objects.remove_if([&](const Particle &p)
-                                     { return usr::Utils::isInRadius(p, mouse_position, 10.0f); });
+            scene.objects().remove_if([&](const Particle &p)
+                                      { return usr::Utils::isInRadius(p, mouse_position, 10.0f); });
         }
 
         // Update physics

@@ -13,11 +13,11 @@ public:
 
     void updateVA()
     {
-        const uint32_t links_count = to<uint32_t>(m_scene.m_constraints.size());
+        const uint32_t links_count = to<uint32_t>(m_scene.constraints().size());
         m_va.resize(2 * links_count);
         for (uint32_t i(0); i < links_count; ++i)
         {
-            LinkConstraint &current_link = m_scene.m_constraints.data[i];
+            LinkConstraint &current_link = m_scene.constraints().data[i];
             m_va[2 * i].position = current_link.m_particle_1->m_position;
             m_va[2 * i + 1].position = current_link.m_particle_2->m_position;
         }
