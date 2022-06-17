@@ -26,17 +26,17 @@ public:
 
     void registerCallbacks(sfev::EventManager &event_manager)
     {
-        event_manager.addEventCallback(sf::Event::Closed, [&](sfev::CstEv)
+        event_manager.addEventCallback(sf::Event::Closed, [&](const sf::Event &)
                                        { m_window.close(); });
-        event_manager.addKeyPressedCallback(sf::Keyboard::Escape, [&](sfev::CstEv)
+        event_manager.addKeyPressedCallback(sf::Keyboard::Escape, [&](const sf::Event &)
                                             { m_window.close(); });
-        event_manager.addMousePressedCallback(sf::Mouse::Left, [&](sfev::CstEv)
+        event_manager.addMousePressedCallback(sf::Mouse::Left, [&](const sf::Event &)
                                               { m_viewport_handler.click(event_manager.getFloatMousePosition()); });
-        event_manager.addMouseReleasedCallback(sf::Mouse::Left, [&](sfev::CstEv)
+        event_manager.addMouseReleasedCallback(sf::Mouse::Left, [&](const sf::Event &)
                                                { m_viewport_handler.unclick(); });
-        event_manager.addEventCallback(sf::Event::MouseMoved, [&](sfev::CstEv)
+        event_manager.addEventCallback(sf::Event::MouseMoved, [&](const sf::Event &)
                                        { m_viewport_handler.setMousePosition(event_manager.getFloatMousePosition()); });
-        event_manager.addEventCallback(sf::Event::MouseWheelScrolled, [&](sfev::CstEv e)
+        event_manager.addEventCallback(sf::Event::MouseWheelScrolled, [&](const sf::Event &e)
                                        { m_viewport_handler.wheelZoom(e.mouseWheelScroll.delta); });
     }
 

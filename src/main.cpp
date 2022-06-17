@@ -22,15 +22,15 @@ int main()
     bool erasing = false;
 
     // Add events callback for mouse control
-    app.getEventManager().addMousePressedCallback(sf::Mouse::Right, [&](sfev::CstEv)
+    app.getEventManager().addMousePressedCallback(sf::Mouse::Right, [&](const sf::Event &)
                                                   {
         dragging = true;
         last_mouse_position = app.getWorldMousePosition(); });
-    app.getEventManager().addMouseReleasedCallback(sf::Mouse::Right, [&](sfev::CstEv)
+    app.getEventManager().addMouseReleasedCallback(sf::Mouse::Right, [&](const sf::Event &)
                                                    { dragging = false; });
-    app.getEventManager().addMousePressedCallback(sf::Mouse::Middle, [&](sfev::CstEv)
+    app.getEventManager().addMousePressedCallback(sf::Mouse::Middle, [&](const sf::Event &)
                                                   { erasing = true; });
-    app.getEventManager().addMouseReleasedCallback(sf::Mouse::Middle, [&](sfev::CstEv)
+    app.getEventManager().addMouseReleasedCallback(sf::Mouse::Middle, [&](const sf::Event &)
                                                    { erasing = false; });
 
     // Add 2 wind waves

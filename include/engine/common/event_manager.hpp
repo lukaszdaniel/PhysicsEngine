@@ -13,8 +13,6 @@ namespace sfev
     template <typename T>
     using EventCallbackMap = std::unordered_map<T, EventCallback>;
 
-    using CstEv = const sf::Event &;
-
     /*
         This class handles subtyped events like keyboard or mouse events
         The unpack function allows to get relevant information from the processed event
