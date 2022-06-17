@@ -18,7 +18,7 @@ struct LinkConstraint
     LinkConstraint(ParticleRef p_1, ParticleRef p_2)
         : particle_1(p_1), particle_2(p_2)
     {
-        distance = MathVec2::length(p_1->position - p_2->position);
+        distance = MathVec2::length(p_1->m_position - p_2->m_position);
     }
 
     [[nodiscard]] bool isValid() const
@@ -34,7 +34,7 @@ struct LinkConstraint
         }
         Particle &p_1 = *particle_1;
         Particle &p_2 = *particle_2;
-        const sf::Vector2f v = p_1.position - p_2.position;
+        const sf::Vector2f v = p_1.m_position - p_2.m_position;
         const float dist = MathVec2::length(v);
         if (dist > distance)
         {
@@ -42,10 +42,10 @@ struct LinkConstraint
             broken = dist > distance * max_elongation_ratio;
             const sf::Vector2f n = v / dist;
             const float c = distance - dist;
-            const sf::Vector2f p = -(c * strength) / (p_1.mass + p_2.mass) * n;
+            const sf::Vector2f p = -(c * strength) / (p_1.m_mass + p_2.m_mass) * n;
             // Apply position correction
-            p_1.move(-p / p_1.mass);
-            p_2.move(p / p_2.mass);
+            p_1.move(-p / p_1.m_mass);
+            p_2.move(p / p_2.m_mass);
         }
     }
 };

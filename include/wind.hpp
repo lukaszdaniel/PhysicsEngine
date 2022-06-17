@@ -37,9 +37,9 @@ struct WindManager
             w.update(dt);
             for (Particle &p : scene.m_objects)
             {
-                if (w.rect.contains(p.position))
+                if (w.rect.contains(p.m_position))
                 {
-                    p.forces += 1.0f * w.force / dt;
+                    p.m_forces += 1.0f * w.force / dt;
                 }
             }
 

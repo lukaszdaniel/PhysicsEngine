@@ -41,7 +41,7 @@ public:
                 else
                 {
                     // If not, pin the particle
-                    m_objects[id].moving = false;
+                    m_objects[id].m_moving = false;
                 }
             }
         }
@@ -66,7 +66,7 @@ public:
     {
         for (Particle &p : m_objects)
         {
-            p.forces += gravity * p.mass;
+            p.m_forces += gravity * p.m_mass;
         }
     }
 
@@ -74,7 +74,7 @@ public:
     {
         for (Particle &p : m_objects)
         {
-            p.forces -= p.velocity * friction_coef;
+            p.m_forces -= p.m_velocity * friction_coef;
         }
     }
 
@@ -115,7 +115,7 @@ public:
     civ::ID addParticle(sf::Vector2f position)
     {
         const civ::ID particle_id = m_objects.emplace_back(position);
-        m_objects[particle_id].id = particle_id;
+        m_objects[particle_id].m_id = particle_id;
         return particle_id;
     }
 

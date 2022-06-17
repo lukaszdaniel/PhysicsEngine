@@ -7,7 +7,7 @@ namespace usr
     {
         bool isInRadius(const Particle &p, sf::Vector2f center, float radius)
         {
-            const sf::Vector2f v = center - p.position;
+            const sf::Vector2f v = center - p.m_position;
             return MathVec2::dot(v, v) < radius * radius;
         }
 
@@ -17,7 +17,7 @@ namespace usr
             {
                 if (isInRadius(p, position, radius))
                 {
-                    p.forces += force;
+                    p.m_forces += force;
                 }
             }
         }
