@@ -3,50 +3,53 @@
 #include <SFML/Graphics/Rect.hpp>
 #include "engine/physics/physics.hpp"
 
-struct Wind
+class Wind
 {
-    sf::FloatRect rect;
-    sf::Vector2f force;
-
-    Wind(sf::Vector2f s, sf::Vector2f p, sf::Vector2f f)
-        : rect(p, s), force(f)
+public:
+    Wind(sf::Vector2f s, sf::Vector2f p, sf::Vector2f force)
+        : m_rect(p, s), m_force(force)
     {
     }
 
     void update(float dt)
     {
-        rect.left += 1.0f * force.x * dt;
-        // rect.top += force.y * dt;
+        m_rect.left += 1.0f * m_force.x * dt;
+        // m_rect.top += m_force.y * dt;
     }
+
+    sf::FloatRect m_rect;
+    sf::Vector2f m_force;
 };
 
-struct WindManager
+class WindManager
 {
-    std::vector<Wind> winds;
-    float world_width = 0.0f;
-
-    explicit WindManager(float width)
-        : world_width(width)
+public:
+    explicit WindManager(float width, unsigned int num_waves)
+        : m_world_width(width)
     {
+        m_wind_waves.reserve(num_waves);
     }
 
     void update(Scene &scene, float dt)
     {
-        for (Wind &w : winds)
+        for (Wind &w : m_wind_waves)
         {
             w.update(dt);
             for (Particle &p : scene.m_objects)
             {
-                if (w.rect.contains(p.m_position))
+                if (w.m_rect.contains(p.m_position))
                 {
-                    p.m_forces += 1.0f * w.force / dt;
+                    p.m_forces += 1.0f * w.m_force / dt;
                 }
             }
 
-            if (w.rect.left > world_width)
+            if (w.m_rect.left > m_world_width)
             {
-                w.rect.left = -w.rect.width;
+                w.m_rect.left = -w.m_rect.width;
             }
         }
     }
+
+    std::vector<Wind> m_wind_waves;
+    float m_world_width;
 };
