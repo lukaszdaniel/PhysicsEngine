@@ -30,12 +30,12 @@ struct WindManager
     {
     }
 
-    void update(PhysicSolver &solver, float dt)
+    void update(Scene &scene, float dt)
     {
         for (Wind &w : winds)
         {
             w.update(dt);
-            for (Particle &p : solver.objects)
+            for (Particle &p : scene.objects)
             {
                 if (w.rect.contains(p.position))
                 {
