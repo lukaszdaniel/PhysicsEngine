@@ -43,7 +43,7 @@ struct PhysicSolver
 
     void applyAirFriction()
     {
-        const float friction_coef = 0.5f;
+        constexpr float friction_coef = 0.5f;
         for (Particle &p : objects)
         {
             p.forces -= p.velocity * friction_coef;

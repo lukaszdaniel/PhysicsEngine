@@ -74,7 +74,7 @@ int main()
         sf::Vector2f(3000.0f, 0.0f));
 
     // Main loop
-    const float dt = 1.0f / 60.0f;
+    constexpr float dt = 1.0f / 60.0f;
     while (app.run())
     {
         // Get the mouse coord in the world space, to allow proper control even with modified viewport
@@ -83,7 +83,7 @@ int main()
         if (dragging)
         {
             // Apply a force on the particles in the direction of the mouse's movement
-            const sf::Vector2f mouse_speed = mouse_position - last_mouse_position;
+            const sf::Vector2f mouse_speed = (mouse_position - last_mouse_position) /* / 1.0 */;
             last_mouse_position = mouse_position;
             usr::Utils::applyForceOnCloth(mouse_position, 100.0f, mouse_speed * 8000.0f, solver);
         }
