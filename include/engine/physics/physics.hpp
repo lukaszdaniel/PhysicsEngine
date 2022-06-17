@@ -97,11 +97,11 @@ struct PhysicSolver
         constraints[link_id].max_elongation_ratio = max_elongation_ratio;
     }
 
-    void map(const std::function<void(Particle &)> &callback)
-    {
-        for (Particle &p : objects)
-        {
-            callback(p);
-        }
-    }
+    // void map(const std::function<void(Particle &)> &callback)
+    // {
+    //     for (Particle &p : objects)
+    //     {
+    //         callback(p);
+    //     }
+    // }
 };

@@ -1,43 +1,69 @@
 #pragma once
 #include <cstdint>
 #include <SFML/System.hpp>
-
-struct Profiler
+#if 0 // UNUSED
+class Profiler
 {
-	struct Element
+public:
+	class Element
 	{
-		uint32_t start, total;
+	public:
 		Element()
-			: start(0), total(0)
+			: m_start(0), m_total(0)
 		{
 		}
 
 		void reset()
 		{
-			start = 0;
-			total = 0;
+			m_start = 0;
+			m_total = 0;
 		}
 
 		float asMilliseconds() const
 		{
-			return total * 0.001f;
+			return m_total * 0.001f;
 		}
-	};
 
-	sf::Clock clock;
+		auto start() const
+		{
+			return m_start;
+		}
+
+		void setStart(sf::Int64 time)
+		{
+			m_start = time;
+		}
+
+		auto total() const
+		{
+			return m_total;
+		}
+
+		void setStop(sf::Int64 time)
+		{
+			m_total += time - m_start;
+		}
+
+	private:
+		uint32_t m_start, m_total;
+	};
 
 	Profiler()
 	{
-		clock.restart();
+		m_clock.restart();
 	}
 
 	void start(Element &elem)
 	{
-		elem.start = clock.getElapsedTime().asMicroseconds();
+		elem.setStart(m_clock.getElapsedTime().asMicroseconds());
 	}
 
 	void stop(Element &elem)
 	{
-		elem.total += clock.getElapsedTime().asMicroseconds() - elem.start;
+		elem.setStop(m_clock.getElapsedTime().asMicroseconds());
 	}
+
+private:
+	sf::Clock m_clock;
 };
+#endif

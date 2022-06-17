@@ -3,15 +3,15 @@
 
 namespace usr
 {
-    struct Utils
+    namespace Utils
     {
-        static bool isInRadius(const Particle &p, sf::Vector2f center, float radius)
+        bool isInRadius(const Particle &p, sf::Vector2f center, float radius)
         {
             const sf::Vector2f v = center - p.position;
-            return v.x * v.x + v.y * v.y < radius * radius;
+            return MathVec2::dot(v, v) < radius * radius;
         }
 
-        static void applyForceOnCloth(sf::Vector2f position, float radius, sf::Vector2f force, PhysicSolver &solver)
+        void applyForceOnCloth(sf::Vector2f position, float radius, sf::Vector2f force, PhysicSolver &solver)
         {
             for (Particle &p : solver.objects)
             {
@@ -21,5 +21,5 @@ namespace usr
                 }
             }
         }
-    };
-}
+    } // namespace Utils
+} // namespace usr

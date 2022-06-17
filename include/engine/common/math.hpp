@@ -1,77 +1,80 @@
 #pragma once
 #include <cmath>
 
-struct Math
+namespace Math
 {
-    static constexpr float PI = 3.141592653f;
+    constexpr float PI = 3.141592653f;
 
     template <typename T>
-    static T sign(T v)
+    T sign(T v)
     {
         return v < 0.0f ? -1.0f : 1.0f;
     }
 
-    static float sigm(float x)
+    template <typename T>
+    T sigm(T x)
     {
         return 1.0f / (1.0f + exp(-x));
     }
 
-    static float sigm_0(float x)
+    template <typename T>
+    T sigm_0(T x)
     {
         return sigm(x) - 0.5f;
     }
 
-    static float radToDeg(float r)
+    template <typename T>
+    T radToDeg(T r)
     {
-        constexpr float radian_to_deg = 180.0f / PI;
+        constexpr T radian_to_deg = 180.0f / PI;
         return r * radian_to_deg;
     }
 };
 
-struct MathVec2
+namespace MathVec2
 {
     template <template <typename> class Vec2Type, typename T>
-    static T length(Vec2Type<T> v)
-    {
-        return sqrt(v.x * v.x + v.y * v.y);
-    }
-
-    template <template <typename> class Vec2Type, typename T>
-    static T angle(Vec2Type<T> v_1, Vec2Type<T> v_2)
-    {
-        const T dot = v_1.x * v_2.x + v_1.y * v_2.y;
-        const T det = v_1.x * v_2.y - v_1.y * v_2.x;
-        return atan2(det, dot);
-    }
-
-    template <template <typename> class Vec2Type, typename T>
-    static T dot(Vec2Type<T> v1, Vec2Type<T> v2)
+    T dot(const Vec2Type<T> &v1, const Vec2Type<T> &v2)
     {
         return v1.x * v2.x + v1.y * v2.y;
     }
 
     template <template <typename> class Vec2Type, typename T>
-    static T cross(Vec2Type<T> v1, Vec2Type<T> v2)
+    T cross(const Vec2Type<T> &v1, const Vec2Type<T> &v2)
     {
         return v1.x * v2.y - v1.y * v2.x;
     }
 
     template <typename Vec2Type>
-    static Vec2Type normal(const Vec2Type &v)
+    Vec2Type normal(const Vec2Type &v)
     {
         return {-v.y, v.x};
     }
 
     template <typename Vec2Type>
-    static Vec2Type rotate(const Vec2Type &v, float angle)
+    Vec2Type rotate(const Vec2Type &v, float angle)
     {
-        const float ca = cos(angle);
-        const float sa = sin(angle);
+        const float ca = std::cos(angle);
+        const float sa = std::sin(angle);
         return {ca * v.x - sa * v.y, sa * v.x + ca * v.y};
     }
 
+    template <template <typename> class Vec2Type, typename T>
+    T length(const Vec2Type<T> &v)
+    {
+        return std::sqrt(dot(v, v));
+    }
+
+    template <template <typename> class Vec2Type, typename T>
+    T angle(const Vec2Type<T> &v_1, const Vec2Type<T> &v_2)
+    {
+        const T prod = dot(v_1, v_2);
+        const T det = cross(v_1, v_2);
+        return std::atan2(det, prod);
+    }
+
     template <typename Vec2Type>
-    static Vec2Type normalize(const Vec2Type &v)
+    Vec2Type normalize(const Vec2Type &v)
     {
         return v / length(v);
     }

@@ -1,17 +1,20 @@
 #pragma once
-
+#if 0 // UNUSED
 template <typename T, uint64_t N>
-struct Array
+class Array
 {
+public:
 	T &operator[](const uint64_t index)
 	{
-		return data[index];
+		return m_data[index];
 	}
 
 	T operator[](const uint64_t index) const
 	{
-		return data[index];
+		return m_data[index];
 	}
 
-	T data[N];
+private:
+	T m_data[N];
 };
+#endif
