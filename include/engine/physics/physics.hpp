@@ -122,8 +122,8 @@ public:
     void addLink(civ::ID particle_1, civ::ID particle_2, float max_elongation_ratio = 1.5f)
     {
         const civ::ID link_id = m_constraints.emplace_back(m_objects.getRef(particle_1), m_objects.getRef(particle_2));
-        m_constraints[link_id].id = link_id;
-        m_constraints[link_id].max_elongation_ratio = max_elongation_ratio;
+        m_constraints[link_id].m_id = link_id;
+        m_constraints[link_id].m_max_elongation_ratio = max_elongation_ratio;
     }
 
     CIVector<LinkConstraint> &constraints()
