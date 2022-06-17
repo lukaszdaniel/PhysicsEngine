@@ -1,58 +1,58 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-struct ViewportHandler
+class ViewportHandler
 {
-    struct State
+public:
+    class State
     {
-        sf::Vector2f center;
-        sf::Vector2f offset;
-        float zoom;
-        bool clicking;
-        sf::Vector2f mouse_position;
-        sf::Vector2f mouse_world_position;
-        sf::Transform transform;
-
+    public:
         State(sf::Vector2f render_size, const float base_zoom = 1.0f)
-            : center(render_size.x * 0.5f, render_size.y * 0.5f), offset(center / base_zoom), zoom(base_zoom), clicking(false)
+            : m_center(render_size.x * 0.5f, render_size.y * 0.5f), m_offset(m_center / base_zoom), m_zoom(base_zoom), m_clicking(false)
         {
         }
 
         void updateState()
         {
-            const float z = zoom;
-            transform = sf::Transform::Identity;
-            transform.translate(center);
-            transform.scale(z, z);
-            transform.translate(-offset);
+            const float z = m_zoom;
+            m_transform = sf::Transform::Identity;
+            m_transform.translate(m_center);
+            m_transform.scale(z, z);
+            m_transform.translate(-m_offset);
         }
 
         void updateMousePosition(sf::Vector2f new_position)
         {
-            mouse_position = new_position;
+            m_mouse_position = new_position;
             const sf::Vector2f pos(static_cast<float>(new_position.x), static_cast<float>(new_position.y));
-            mouse_world_position = offset + (pos - center) / zoom;
+            m_mouse_world_position = m_offset + (pos - m_center) / m_zoom;
         }
+
+        sf::Vector2f m_center;
+        sf::Vector2f m_offset;
+        float m_zoom;
+        bool m_clicking;
+        sf::Vector2f m_mouse_position;
+        sf::Vector2f m_mouse_world_position;
+        sf::Transform m_transform;
     };
 
-    State state;
-
     ViewportHandler(sf::Vector2f size)
-        : state(size)
+        : m_state(size)
     {
-        state.updateState();
+        m_state.updateState();
     }
 
     void addOffset(sf::Vector2f v)
     {
-        state.offset += v / state.zoom;
-        state.updateState();
+        m_state.m_offset += v / m_state.m_zoom;
+        m_state.updateState();
     }
 
     void zoom(float f)
     {
-        state.zoom *= f;
-        state.updateState();
+        m_state.m_zoom *= f;
+        m_state.updateState();
     }
 
     void wheelZoom(float w)
@@ -67,54 +67,57 @@ struct ViewportHandler
 
     void reset()
     {
-        state.zoom = 1.0f;
-        setFocus(state.center);
+        m_state.m_zoom = 1.0f;
+        setFocus(m_state.m_center);
     }
 
     const sf::Transform &getTransform() const
     {
-        return state.transform;
+        return m_state.m_transform;
     }
 
     void click(sf::Vector2f relative_click_position)
     {
-        state.mouse_position = relative_click_position;
-        state.clicking = true;
+        m_state.m_mouse_position = relative_click_position;
+        m_state.m_clicking = true;
     }
 
     void unclick()
     {
-        state.clicking = false;
+        m_state.m_clicking = false;
     }
 
     void setMousePosition(sf::Vector2f new_mouse_position)
     {
-        if (state.clicking)
+        if (m_state.m_clicking)
         {
-            addOffset(state.mouse_position - new_mouse_position);
+            addOffset(m_state.m_mouse_position - new_mouse_position);
         }
-        state.updateMousePosition(new_mouse_position);
+        m_state.updateMousePosition(new_mouse_position);
     }
 
     void setFocus(sf::Vector2f focus_position)
     {
-        state.offset = focus_position;
-        state.updateState();
+        m_state.m_offset = focus_position;
+        m_state.updateState();
     }
 
-    void setZoom(float zoom)
+    void setZoom(float new_zoom)
     {
-        state.zoom = zoom;
-        state.updateState();
+        m_state.m_zoom = new_zoom;
+        m_state.updateState();
     }
 
     sf::Vector2f getMouseWorldPosition() const
     {
-        return state.mouse_world_position;
+        return m_state.m_mouse_world_position;
     }
 
     sf::Vector2f getScreenCoords(sf::Vector2f world_pos) const
     {
-        return state.transform.transformPoint(world_pos);
+        return m_state.m_transform.transformPoint(world_pos);
     }
+
+private:
+    State m_state;
 };
