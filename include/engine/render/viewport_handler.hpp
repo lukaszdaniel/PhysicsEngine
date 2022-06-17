@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-
 struct ViewportHandler
 {
     struct State
@@ -15,11 +14,9 @@ struct ViewportHandler
         sf::Transform transform;
 
         State(sf::Vector2f render_size, const float base_zoom = 1.0f)
-            : center(render_size.x * 0.5f, render_size.y * 0.5f)
-            , offset(center / base_zoom)
-            , zoom(base_zoom)
-            , clicking(false)
-        {}
+            : center(render_size.x * 0.5f, render_size.y * 0.5f), offset(center / base_zoom), zoom(base_zoom), clicking(false)
+        {
+        }
 
         void updateState()
         {
@@ -60,7 +57,8 @@ struct ViewportHandler
 
     void wheelZoom(float w)
     {
-        if (w) {
+        if (w)
+        {
             const float zoom_amount = 1.2f;
             const float delta = w > 0 ? zoom_amount : 1.0f / zoom_amount;
             zoom(delta);
@@ -73,7 +71,7 @@ struct ViewportHandler
         setFocus(state.center);
     }
 
-    const sf::Transform& getTransform() const
+    const sf::Transform &getTransform() const
     {
         return state.transform;
     }
@@ -91,7 +89,8 @@ struct ViewportHandler
 
     void setMousePosition(sf::Vector2f new_mouse_position)
     {
-        if (state.clicking) {
+        if (state.clicking)
+        {
             addOffset(state.mouse_position - new_mouse_position);
         }
         state.updateMousePosition(new_mouse_position);

@@ -2,16 +2,15 @@
 #include <cstdint>
 #include <SFML/System.hpp>
 
-
 struct Profiler
 {
 	struct Element
 	{
 		uint32_t start, total;
 		Element()
-			: start(0)
-			, total(0)
-		{}
+			: start(0), total(0)
+		{
+		}
 
 		void reset()
 		{
@@ -32,12 +31,12 @@ struct Profiler
 		clock.restart();
 	}
 
-	void start(Element& elem)
+	void start(Element &elem)
 	{
 		elem.start = clock.getElapsedTime().asMicroseconds();
 	}
 
-	void stop(Element& elem)
+	void stop(Element &elem)
 	{
 		elem.total += clock.getElapsedTime().asMicroseconds() - elem.start;
 	}

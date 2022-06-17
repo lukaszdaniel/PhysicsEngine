@@ -1,18 +1,17 @@
 #pragma once
 #include <cmath>
 
-
 struct Vec2
 {
 	Vec2()
-		: x(0.0f)
-		, y(0.0f)
-	{}
+		: x(0.0f), y(0.0f)
+	{
+	}
 
 	Vec2(float x_, float y_)
-		: x(x_)
-		, y(y_)
-	{}
+		: x(x_), y(y_)
+	{
+	}
 
 	float getLength2() const
 	{
@@ -35,7 +34,7 @@ struct Vec2
 		return Vec2(x * f, y * f);
 	}
 
-	Vec2 operator-(const Vec2& other) const
+	Vec2 operator-(const Vec2 &other) const
 	{
 		return Vec2(x - other.x, y - other.y);
 	}
@@ -45,7 +44,7 @@ struct Vec2
 		return Vec2(-x, -y);
 	}
 
-	void operator+=(const Vec2& other)
+	void operator+=(const Vec2 &other)
 	{
 		x += other.x;
 		y += other.y;
@@ -63,23 +62,23 @@ struct Vec2
 		y /= f;
 	}
 
-	Vec2 plus(const Vec2& other) const
+	Vec2 plus(const Vec2 &other) const
 	{
 		return Vec2(x + other.x, y + other.y);
 	}
 
-	Vec2 minus(const Vec2& other) const
+	Vec2 minus(const Vec2 &other) const
 	{
 		return Vec2(x - other.x, y - other.y);
 	}
 
-	void operator-=(const Vec2& other)
+	void operator-=(const Vec2 &other)
 	{
 		x -= other.x;
 		y -= other.y;
 	}
 
-	void rotate(const Vec2& origin, float angle)
+	void rotate(const Vec2 &origin, float angle)
 	{
 		const Vec2 v = *this - origin;
 
@@ -99,12 +98,12 @@ struct Vec2
 		return Vec2(-y, x);
 	}
 
-	float dot(const Vec2& other) const
+	float dot(const Vec2 &other) const
 	{
 		return x * other.x + y * other.y;
 	}
 
-	float cross(const Vec2& other) const
+	float cross(const Vec2 &other) const
 	{
 		return x * other.y - y * other.x;
 	}
@@ -114,7 +113,7 @@ struct Vec2
 		return (*this) / getLength();
 	}
 
-	static Vec2 rotate(Vec2 v, const Vec2& origin, float angle)
+	static Vec2 rotate(Vec2 v, const Vec2 &origin, float angle)
 	{
 		v.rotate(origin, angle);
 		return v;
@@ -123,18 +122,17 @@ struct Vec2
 	float x, y;
 };
 
-
 struct IVec2
 {
 	int32_t x, y;
 
 	IVec2()
-		: x(0)
-		, y(0)
-	{}
+		: x(0), y(0)
+	{
+	}
 
 	IVec2(int32_t x_, int32_t y_)
-		: x(x_)
-		, y(y_)
-	{}
+		: x(x_), y(y_)
+	{
+	}
 };

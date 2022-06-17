@@ -1,8 +1,7 @@
 #pragma once
 #include <vector>
 
-
-template<typename T>
+template <typename T>
 struct RAccBase
 {
     uint32_t max_values_count;
@@ -10,11 +9,8 @@ struct RAccBase
     uint32_t current_index;
     T pop_value;
 
-    RAccBase(uint32_t max_size=8)
-        : max_values_count(max_size)
-        , values(max_size, 0.0f)
-        , current_index(0)
-        , pop_value(0.0f)
+    RAccBase(uint32_t max_size = 8)
+        : max_values_count(max_size), values(max_size, 0.0f), current_index(0), pop_value(0.0f)
     {
     }
 
@@ -47,15 +43,13 @@ protected:
     }
 };
 
-
-template<typename T>
+template <typename T>
 struct RMean : public RAccBase<T>
 {
     T sum;
 
-    RMean(uint32_t max_size=8)
-        : RAccBase<T>(max_size)
-        , sum(0.0f)
+    RMean(uint32_t max_size = 8)
+        : RAccBase<T>(max_size), sum(0.0f)
     {
     }
 
@@ -70,8 +64,7 @@ struct RMean : public RAccBase<T>
     }
 };
 
-
-template<typename T>
+template <typename T>
 struct RDiff : public RAccBase<T>
 {
     RDiff(uint32_t max_size = 8)

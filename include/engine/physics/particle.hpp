@@ -2,12 +2,11 @@
 #include <SFML/System/Vector2.hpp>
 #include "../common/index_vector.hpp"
 
-
 struct Particle
 {
-    civ::ID      id            = 0;
-    float        mass          = 1.0f;
-    bool         moving        = true;
+    civ::ID id = 0;
+    float mass = 1.0f;
+    bool moving = true;
     sf::Vector2f position;
     sf::Vector2f position_old;
     sf::Vector2f velocity;
@@ -15,15 +14,15 @@ struct Particle
 
     Particle() = default;
 
-    explicit
-    Particle(sf::Vector2f pos)
-        : position(pos)
-        , position_old(pos)
-    {}
+    explicit Particle(sf::Vector2f pos)
+        : position(pos), position_old(pos)
+    {
+    }
 
     void update(float dt)
     {
-        if (!moving) return;
+        if (!moving)
+            return;
         position_old = position;
         velocity += (forces / mass) * dt;
         position += velocity * dt;
@@ -37,7 +36,8 @@ struct Particle
 
     void move(sf::Vector2f v)
     {
-        if (!moving) return;
+        if (!moving)
+            return;
         position += v;
     }
 };

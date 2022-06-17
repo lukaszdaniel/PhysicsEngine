@@ -1,7 +1,6 @@
 #pragma once
 #include <random>
 
-
 class NumberGenerator
 {
 protected:
@@ -10,11 +9,11 @@ protected:
 
 	NumberGenerator()
 		: gen(rd())
-	{}
+	{
+	}
 };
 
-
-template<typename T>
+template <typename T>
 class RealNumberGenerator : public NumberGenerator
 {
 private:
@@ -22,15 +21,15 @@ private:
 
 public:
 	RealNumberGenerator()
-		: NumberGenerator()
-		, dis(0.0f, 1.0f)		
-	{}
-	
+		: NumberGenerator(), dis(0.0f, 1.0f)
+	{
+	}
+
 	// random_device is not copyable
-	RealNumberGenerator(const RealNumberGenerator<T>& right)
-		: NumberGenerator()
-		, dis(right.dis)
-	{}
+	RealNumberGenerator(const RealNumberGenerator<T> &right)
+		: NumberGenerator(), dis(right.dis)
+	{
+	}
 
 	float get()
 	{
@@ -53,8 +52,7 @@ public:
 	}
 };
 
-
-template<typename T>
+template <typename T>
 class RNG
 {
 private:
@@ -99,22 +97,23 @@ public:
 
 using RNGf = RNG<float>;
 
-template<typename T>
+template <typename T>
 RealNumberGenerator<T> RNG<T>::gen = RealNumberGenerator<T>();
 
-
-template<typename T>
+template <typename T>
 class IntegerNumberGenerator : public NumberGenerator
 {
 public:
 	IntegerNumberGenerator()
 		: NumberGenerator()
-	{}
+	{
+	}
 
 	// random_device is not copyable
-	IntegerNumberGenerator(const IntegerNumberGenerator<T>& right)
+	IntegerNumberGenerator(const IntegerNumberGenerator<T> &right)
 		: NumberGenerator()
-	{}
+	{
+	}
 
 	T getUnder(T max)
 	{
@@ -129,8 +128,7 @@ public:
 	}
 };
 
-
-template<typename T>
+template <typename T>
 class RNGi
 {
 private:
@@ -148,7 +146,7 @@ public:
 	}
 };
 
-template<typename T>
+template <typename T>
 IntegerNumberGenerator<T> RNGi<T>::gen;
 
 using RNGi32 = RNGi<int32_t>;

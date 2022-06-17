@@ -5,25 +5,25 @@
 #include "engine/common/utils.hpp"
 #include "constraints.hpp"
 
-
 struct PhysicSolver
 {
-    CIVector<Particle>       objects;
+    CIVector<Particle> objects;
     CIVector<LinkConstraint> constraints;
     // Simulator iterations count
     uint32_t solver_iterations;
     uint32_t sub_steps;
 
     PhysicSolver()
-        : solver_iterations(1)
-        , sub_steps(16)
-    {}
+        : solver_iterations(1), sub_steps(16)
+    {
+    }
 
     void update(float dt)
     {
         const float sub_step_dt = dt / to<float>(sub_steps);
         removeBrokenLinks();
-        for (uint32_t i(sub_steps); i--;) {
+        for (uint32_t i(sub_steps); i--;)
+        {
             applyGravity();
             applyAirFriction();
             updatePositions(sub_step_dt);
@@ -35,7 +35,8 @@ struct PhysicSolver
     void applyGravity()
     {
         const sf::Vector2f gravity(0.0f, 1500.0f);
-        for (Particle& p : objects) {
+        for (Particle &p : objects)
+        {
             p.forces += gravity * p.mass;
         }
     }
@@ -43,29 +44,34 @@ struct PhysicSolver
     void applyAirFriction()
     {
         const float friction_coef = 0.5f;
-        for (Particle& p : objects) {
+        for (Particle &p : objects)
+        {
             p.forces -= p.velocity * friction_coef;
         }
     }
 
     void updatePositions(float dt)
     {
-        for (Particle& p : objects) {
+        for (Particle &p : objects)
+        {
             p.update(dt);
         }
     }
 
     void updateDerivatives(float dt)
     {
-        for (Particle& p : objects) {
+        for (Particle &p : objects)
+        {
             p.updateDerivatives(dt);
         }
     }
 
     void solveConstraints()
     {
-        for (uint32_t i(solver_iterations); i--;) {
-            for (LinkConstraint &l: constraints) {
+        for (uint32_t i(solver_iterations); i--;)
+        {
+            for (LinkConstraint &l : constraints)
+            {
                 l.solve();
             }
         }
@@ -73,7 +79,8 @@ struct PhysicSolver
 
     void removeBrokenLinks()
     {
-        constraints.remove_if([](const LinkConstraint& c) {return !c.isValid();});
+        constraints.remove_if([](const LinkConstraint &c)
+                              { return !c.isValid(); });
     }
 
     civ::ID addParticle(sf::Vector2f position)
@@ -90,9 +97,10 @@ struct PhysicSolver
         constraints[link_id].max_elongation_ratio = max_elongation_ratio;
     }
 
-    void map(const std::function<void(Particle&)>& callback)
+    void map(const std::function<void(Particle &)> &callback)
     {
-        for (Particle& p : objects) {
+        for (Particle &p : objects)
+        {
             callback(p);
         }
     }
