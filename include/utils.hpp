@@ -13,7 +13,7 @@ namespace usr
 
         void applyForceOnCloth(sf::Vector2f position, float radius, sf::Vector2f force, Scene &scene)
         {
-            for (Particle &p : scene.objects)
+            for (Particle &p : scene.m_objects)
             {
                 if (isInRadius(p, position, radius))
                 {

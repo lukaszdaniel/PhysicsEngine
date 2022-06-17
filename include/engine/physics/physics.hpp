@@ -41,7 +41,7 @@ public:
                 else
                 {
                     // If not, pin the particle
-                    objects[id].moving = false;
+                    m_objects[id].moving = false;
                 }
             }
         }
@@ -58,13 +58,13 @@ public:
 
     void removeBrokenLinks()
     {
-        constraints.remove_if([](const LinkConstraint &c)
+        m_constraints.remove_if([](const LinkConstraint &c)
                               { return !c.isValid(); });
     }
 
     void applyGravity(const sf::Vector2f &gravity)
     {
-        for (Particle &p : objects)
+        for (Particle &p : m_objects)
         {
             p.forces += gravity * p.mass;
         }
@@ -72,7 +72,7 @@ public:
 
     void applyAirFriction(const float &friction_coef)
     {
-        for (Particle &p : objects)
+        for (Particle &p : m_objects)
         {
             p.forces -= p.velocity * friction_coef;
         }
@@ -80,7 +80,7 @@ public:
 
     void updatePositions(float dt)
     {
-        for (Particle &p : objects)
+        for (Particle &p : m_objects)
         {
             p.update(dt);
         }
@@ -88,7 +88,7 @@ public:
 
     void updateDerivatives(float dt)
     {
-        for (Particle &p : objects)
+        for (Particle &p : m_objects)
         {
             p.updateDerivatives(dt);
         }
@@ -96,51 +96,67 @@ public:
 
     void solveConstraints()
     {
-        for (LinkConstraint &l : constraints)
+        for (LinkConstraint &l : m_constraints)
         {
             l.solve();
         }
     }
 
+    CIVector<Particle> &objects()
+    {
+        return m_objects;
+    }
+
+    Particle &objects(const civ::ID id)
+    {
+        return m_objects[id];
+    }
+
     civ::ID addParticle(sf::Vector2f position)
     {
-        const civ::ID particle_id = objects.emplace_back(position);
-        objects[particle_id].id = particle_id;
+        const civ::ID particle_id = m_objects.emplace_back(position);
+        m_objects[particle_id].id = particle_id;
         return particle_id;
     }
 
     void addLink(civ::ID particle_1, civ::ID particle_2, float max_elongation_ratio = 1.5f)
     {
-        const civ::ID link_id = constraints.emplace_back(objects.getRef(particle_1), objects.getRef(particle_2));
-        constraints[link_id].id = link_id;
-        constraints[link_id].max_elongation_ratio = max_elongation_ratio;
+        const civ::ID link_id = m_constraints.emplace_back(m_objects.getRef(particle_1), m_objects.getRef(particle_2));
+        m_constraints[link_id].id = link_id;
+        m_constraints[link_id].max_elongation_ratio = max_elongation_ratio;
+    }
+
+    CIVector<LinkConstraint> &constraints()
+    {
+        return m_constraints;
     }
 
     // void map(const std::function<void(Particle &)> &callback)
     // {
-    //     for (Particle &p : objects)
+    //     for (Particle &p : m_objects)
     //     {
     //         callback(p);
     //     }
     // }
 
-    CIVector<Particle> objects;
-    CIVector<LinkConstraint> constraints;
+    CIVector<Particle> m_objects;
+    CIVector<LinkConstraint> m_constraints;
 };
 
-struct PhysicSolver
+class PhysicSolver
 {
+public:
     PhysicSolver(Scene &scene, uint32_t n_iter = 1, uint32_t n_subs = 16)
-        : m_scene(scene), solver_iterations(n_iter), sub_steps(n_subs)
+        : m_scene(scene), m_solver_iterations(n_iter), m_sub_steps(n_subs)
     {
     }
 
     void update(float dt)
     {
-        const float sub_step_dt = dt / to<float>(sub_steps);
+        const float sub_step_dt = dt / to<float>(m_sub_steps);
         preUpdate();
 
-        for (uint32_t i = sub_steps; i > 0; --i)
+        for (uint32_t i = m_sub_steps; i > 0; --i)
         {
             applyGravity();
             applyAirFriction();
@@ -186,7 +202,7 @@ struct PhysicSolver
 
     void solveConstraints()
     {
-        for (uint32_t i = solver_iterations; i > 0; --i)
+        for (uint32_t i = m_solver_iterations; i > 0; --i)
         {
             m_scene.solveConstraints();
         }
@@ -197,9 +213,10 @@ struct PhysicSolver
         return m_scene;
     }
 
+private:
     Scene &m_scene;
 
     // Simulator iterations count
-    uint32_t solver_iterations;
-    uint32_t sub_steps;
+    uint32_t m_solver_iterations;
+    uint32_t m_sub_steps;
 };

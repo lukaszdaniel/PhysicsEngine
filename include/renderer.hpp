@@ -15,11 +15,11 @@ struct Renderer
 
     void updateVA()
     {
-        const uint32_t links_count = to<uint32_t>(m_scene.constraints.size());
+        const uint32_t links_count = to<uint32_t>(m_scene.m_constraints.size());
         va.resize(2 * links_count);
         for (uint32_t i(0); i < links_count; ++i)
         {
-            LinkConstraint &current_link = m_scene.constraints.data[i];
+            LinkConstraint &current_link = m_scene.m_constraints.data[i];
             va[2 * i].position = current_link.particle_1->position;
             va[2 * i + 1].position = current_link.particle_2->position;
         }

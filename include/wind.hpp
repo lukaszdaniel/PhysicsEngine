@@ -35,7 +35,7 @@ struct WindManager
         for (Wind &w : winds)
         {
             w.update(dt);
-            for (Particle &p : scene.objects)
+            for (Particle &p : scene.m_objects)
             {
                 if (w.rect.contains(p.position))
                 {
