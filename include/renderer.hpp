@@ -26,6 +26,10 @@ public:
     void render(RenderContext &context)
     {
         updateVA();
+        for (Particle &p : m_scene.objects())
+        {
+            context.draw(p);
+        }
         context.draw(m_va);
     }
 

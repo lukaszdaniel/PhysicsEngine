@@ -2,14 +2,16 @@
 #include <SFML/System/Vector2.hpp>
 #include "../common/index_vector.hpp"
 
-class Particle
+class Particle : public sf::CircleShape
 {
 public:
     Particle() = default;
 
     explicit Particle(sf::Vector2f pos)
-        : m_position(pos), m_position_old(pos)
+        : sf::CircleShape(2), m_position(pos), m_position_old(pos)
     {
+        setPosition(m_position);
+        setFillColor(sf::Color(0x89ABE3FF));
     }
 
     void update(float dt)
@@ -19,6 +21,7 @@ public:
         m_position_old = m_position;
         m_velocity += (m_forces / m_mass) * dt;
         m_position += m_velocity * dt;
+        setPosition(m_position);
     }
 
     void updateDerivatives(float dt)

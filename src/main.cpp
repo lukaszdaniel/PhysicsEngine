@@ -20,12 +20,11 @@ int main()
     sf::Vector2f last_mouse_position;
     bool dragging = false;
     bool erasing = false;
+    bool active_wind = false;
 
     // Add events callback for mouse control
     app.getEventManager().addMousePressedCallback(sf::Mouse::Right, [&](const sf::Event &)
-                                                  {
-        dragging = true;
-        last_mouse_position = app.getWorldMousePosition(); });
+                                                  { dragging = true; last_mouse_position = app.getWorldMousePosition(); });
     app.getEventManager().addMouseReleasedCallback(sf::Mouse::Right, [&](const sf::Event &)
                                                    { dragging = false; });
     app.getEventManager().addMousePressedCallback(sf::Mouse::Middle, [&](const sf::Event &)
@@ -33,8 +32,11 @@ int main()
     app.getEventManager().addMouseReleasedCallback(sf::Mouse::Middle, [&](const sf::Event &)
                                                    { erasing = false; });
 
+    app.getEventManager().addKeyPressedCallback(sf::Keyboard::W, [&](const sf::Event &)
+                                                { active_wind = !active_wind; });
+
     // Add 2 wind waves
-    WindManager wind(to<float>(window_width), 2 /* number of wind waves */);
+    WindManager wind(window_width, 2 /* number of wind waves */);
     wind.winds().push_back(Wind(sf::Vector2f(100.0f, window_height), sf::Vector2f(0.0f, 0.0f), sf::Vector2f(1000.0f, 0.0f)));
     wind.winds().push_back(Wind(sf::Vector2f(20.0f, window_height), sf::Vector2f(0.0f, 0.0f), sf::Vector2f(3000.0f, 0.0f)));
 
@@ -61,7 +63,8 @@ int main()
         }
 
         // Update physics
-        wind.update(scene, dt);
+        if (active_wind)
+            wind.update(scene, dt);
         solver.update(dt);
 
         // Render the scene

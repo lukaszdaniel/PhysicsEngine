@@ -35,7 +35,7 @@ private:
 class WindManager
 {
 public:
-    explicit WindManager(float width, unsigned int num_waves)
+    explicit WindManager(uint32_t width, unsigned int num_waves)
         : m_world_width(width)
     {
         m_wind_waves.reserve(num_waves);
