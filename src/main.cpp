@@ -2,7 +2,7 @@
 #include <engine/physics/PhysicSolver.hpp>
 #include <Renderer.hpp>
 #include <WindManager.hpp>
-#include <utils.hpp>
+#include <engine/physics/Particle.hpp>
 
 int main()
 {
@@ -52,14 +52,14 @@ int main()
             // Apply a force on the particles in the direction of the mouse's movement
             const sf::Vector2f mouse_speed = (mouse_position - last_mouse_position) /* / 1.0 */;
             last_mouse_position = mouse_position;
-            usr::Utils::applyForceOnCloth(mouse_position, 100.0f, mouse_speed * 8000.0f, scene);
+            applyForceOnCloth(mouse_position, 100.0f, mouse_speed * 8000.0f, scene);
         }
 
         if (erasing)
         {
             // Delete all nodes that are in the range of the mouse
             scene.objects().remove_if([&](const Particle &p)
-                                      { return usr::Utils::isInRadius(p, mouse_position, 10.0f); });
+                                      { return isInRadius(p, mouse_position, 10.0f); });
         }
 
         // Update physics

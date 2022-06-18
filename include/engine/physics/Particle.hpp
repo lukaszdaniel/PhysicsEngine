@@ -1,6 +1,11 @@
 #pragma once
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <engine/common/index_vector.hpp>
+
+class Scene;
 
 class Particle : public sf::CircleShape
 {
@@ -93,3 +98,6 @@ private:
 };
 
 using ParticleRef = civ::Ref<Particle>;
+
+bool isInRadius(const Particle &p, sf::Vector2f center, float radius);
+void applyForceOnCloth(sf::Vector2f position, float radius, sf::Vector2f force, Scene &scene);
