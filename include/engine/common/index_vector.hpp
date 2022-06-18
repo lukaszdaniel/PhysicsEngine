@@ -11,45 +11,48 @@ namespace civ
 
     struct Slot
     {
-        ID id;
-        ID data_id;
+        ID m_id;
+        ID m_data_id;
     };
 
     template <typename T>
-    struct ObjectSlot
+    class ObjectSlot
     {
+    public:
         ObjectSlot(ID id_, T *object_)
-            : id(id_), object(object_)
+            : m_id(id_), m_object(object_)
         {
         }
 
-        ID id;
-        T *object;
+    private:
+        ID m_id;
+        T *m_object;
     };
 
     template <typename T>
     struct ObjectSlotConst
     {
         ObjectSlotConst(ID id_, const T *object_)
-            : id(id_), object(object_)
+            : m_id(id_), m_object(object_)
         {
         }
 
-        ID id;
-        const T *object;
+        ID m_id;
+        const T *m_object;
     };
 
     struct SlotMetadata
     {
-        ID rid;
-        ID op_id;
+        ID m_rid;
+        ID m_op_id;
     };
 
     template <typename T>
-    struct Vector
+    class Vector
     {
+    public:
         Vector()
-            : data_size(0), op_count(0)
+            : m_data_size(0), m_op_count(0)
         {
         }
         // Data ADD / REMOVE
@@ -78,13 +81,6 @@ namespace civ
         // Number of objects in the array
         uint64_t size() const;
 
-    public:
-        std::vector<T> data;
-        std::vector<uint64_t> ids;
-        std::vector<SlotMetadata> metadata;
-        uint64_t data_size;
-        uint64_t op_count;
-
         bool isFull() const;
         // Returns the ID of the ith element of the data array
         ID getID(uint64_t i) const;
@@ -95,6 +91,13 @@ namespace civ
         Slot getSlot();
         SlotMetadata &getMetadataAt(ID id);
         const T &getAt(uint64_t id) const;
+
+    private:
+        std::vector<T> m_data;
+        std::vector<uint64_t> m_ids;
+        std::vector<SlotMetadata> m_metadata;
+        uint64_t m_data_size;
+        uint64_t m_op_count;
     };
 
     template <typename T>
@@ -102,36 +105,36 @@ namespace civ
     inline uint64_t Vector<T>::emplace_back(Args &&...args)
     {
         const Slot slot = getSlot();
-        new (&data[slot.data_id]) T(args...);
-        return slot.id;
+        new (&m_data[slot.m_data_id]) T(args...);
+        return slot.m_id;
     }
 
     template <typename T>
     inline uint64_t Vector<T>::push_back(const T &obj)
     {
         const Slot slot = getSlot();
-        data[slot.data_id] = obj;
-        return slot.id;
+        m_data[slot.m_data_id] = obj;
+        return slot.m_id;
     }
 
     template <typename T>
     inline void Vector<T>::erase(ID id)
     {
         // Retrieve the object position in data
-        const uint64_t data_index = ids[id];
+        const uint64_t data_index = m_ids[id];
         // Check if the object has been already erased
-        if (data_index >= data_size)
+        if (data_index >= m_data_size)
         {
             return;
         }
         // Swap the object at the end
-        --data_size;
-        const uint64_t last_id = metadata[data_size].rid;
-        std::swap(data[data_size], data[data_index]);
-        std::swap(metadata[data_size], metadata[data_index]);
-        std::swap(ids[last_id], ids[id]);
+        --m_data_size;
+        const uint64_t last_id = m_metadata[m_data_size].m_rid;
+        std::swap(m_data[m_data_size], m_data[data_index]);
+        std::swap(m_metadata[m_data_size], m_metadata[data_index]);
+        std::swap(m_ids[last_id], m_ids[id]);
         // Invalidate the operation ID
-        metadata[data_size].op_id = ++op_count;
+        m_metadata[m_data_size].m_op_id = ++m_op_count;
     }
 
     template <typename T>
@@ -149,127 +152,127 @@ namespace civ
     template <typename T>
     inline ObjectSlot<T> Vector<T>::getSlotAt(uint64_t i)
     {
-        return ObjectSlot<T>(metadata[i].rid, &data[i]);
+        return ObjectSlot<T>(m_metadata[i].m_rid, &m_data[i]);
     }
 
     template <typename T>
     inline ObjectSlotConst<T> Vector<T>::getSlotAt(uint64_t i) const
     {
-        return ObjectSlotConst<T>(metadata[i].rid, &data[i]);
+        return ObjectSlotConst<T>(m_metadata[i].m_rid, &m_data[i]);
     }
 
     template <typename T>
     inline Ref<T> Vector<T>::getRef(ID id)
     {
-        return Ref<T>(id, this, metadata[ids[id]].op_id);
+        return Ref<T>(id, this, m_metadata[m_ids[id]].m_op_id);
     }
 
     template <typename T>
     inline T &Vector<T>::getDataAt(uint64_t i)
     {
-        return data[i];
+        return m_data[i];
     }
 
     template <typename T>
     inline uint64_t Vector<T>::getID(uint64_t i) const
     {
-        return metadata[i].rid;
+        return m_metadata[i].m_rid;
     }
 
     template <typename T>
     inline uint64_t Vector<T>::size() const
     {
-        return data_size;
+        return m_data_size;
     }
 
     template <typename T>
     inline typename std::vector<T>::iterator Vector<T>::begin()
     {
-        return data.begin();
+        return m_data.begin();
     }
 
     template <typename T>
     inline typename std::vector<T>::iterator Vector<T>::end()
     {
-        return data.begin() + data_size;
+        return m_data.begin() + m_data_size;
     }
 
     template <typename T>
     inline typename std::vector<T>::const_iterator Vector<T>::begin() const
     {
-        return data.begin();
+        return m_data.begin();
     }
 
     template <typename T>
     inline typename std::vector<T>::const_iterator Vector<T>::end() const
     {
-        return data.begin() + data_size;
+        return m_data.begin() + m_data_size;
     }
 
     template <typename T>
     inline bool Vector<T>::isFull() const
     {
-        return data_size == data.size();
+        return m_data_size == m_data.size();
     }
 
     template <typename T>
     inline Slot Vector<T>::createNewSlot()
     {
-        data.emplace_back();
-        ids.push_back(data_size);
-        metadata.push_back({data_size, op_count++});
-        return {data_size, data_size};
+        m_data.emplace_back();
+        m_ids.push_back(m_data_size);
+        m_metadata.push_back({m_data_size, m_op_count++});
+        return {m_data_size, m_data_size};
     }
 
     template <typename T>
     inline Slot Vector<T>::getFreeSlot()
     {
-        const uint64_t reuse_id = metadata[data_size].rid;
-        metadata[data_size].op_id = op_count++;
-        return {reuse_id, data_size};
+        const uint64_t reuse_id = m_metadata[m_data_size].m_rid;
+        m_metadata[m_data_size].m_op_id = m_op_count++;
+        return {reuse_id, m_data_size};
     }
 
     template <typename T>
     inline Slot Vector<T>::getSlot()
     {
         const Slot slot = isFull() ? createNewSlot() : getFreeSlot();
-        ++data_size;
+        ++m_data_size;
         return slot;
     }
 
     template <typename T>
     inline SlotMetadata &Vector<T>::getMetadataAt(ID id)
     {
-        return metadata[getDataID(id)];
+        return m_metadata[getDataID(id)];
     }
 
     template <typename T>
     inline uint64_t Vector<T>::getDataID(ID id) const
     {
-        return ids[id];
+        return m_ids[id];
     }
 
     template <typename T>
     inline const T &Vector<T>::getAt(ID id) const
     {
-        return data[getDataID(id)];
+        return m_data[getDataID(id)];
     }
 
     template <typename T>
     inline bool Vector<T>::isValid(ID id, uint64_t validity) const
     {
-        return validity == metadata[getDataID(id)].op_id;
+        return validity == m_metadata[getDataID(id)].m_op_id;
     }
 
     template <typename T>
     void Vector<T>::remove_if(const std::function<bool(const T &)> &f)
     {
         uint64_t data_index = 0;
-        for (auto it = data.begin(); it != this->end(); ++it)
+        for (auto it = m_data.begin(); it != this->end(); ++it)
         {
             if (f(*it))
             {
-                this->erase(metadata[data_index].rid);
+                this->erase(m_metadata[data_index].m_rid);
                 --it;
             }
             else
@@ -280,48 +283,49 @@ namespace civ
     }
 
     template <typename T>
-    struct Ref
+    class Ref
     {
+        public:
         Ref()
-            : id(0), array(nullptr), validity_id(0)
+            : m_id(0), m_array(nullptr), m_validity_id(0)
         {
         }
 
         Ref(ID id_, Vector<T> *a, ID vid)
-            : id(id_), array(a), validity_id(vid)
+            : m_id(id_), m_array(a), m_validity_id(vid)
         {
         }
 
         T *operator->()
         {
-            return &(*array)[id];
+            return &(*m_array)[m_id];
         }
 
         T &operator*()
         {
-            return (*array)[id];
+            return (*m_array)[m_id];
         }
 
         const T &operator*() const
         {
-            return (*array)[id];
+            return (*m_array)[m_id];
         }
 
         civ::ID getID() const
         {
-            return id;
+            return m_id;
         }
 
         explicit
         operator bool() const
         {
-            return array && array->isValid(id, validity_id);
+            return m_array && m_array->isValid(m_id, m_validity_id);
         }
 
     private:
-        ID id;
-        Vector<T> *array;
-        ID validity_id;
+        ID m_id;
+        Vector<T> *m_array;
+        ID m_validity_id;
     };
 
 }
