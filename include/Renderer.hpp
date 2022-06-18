@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <engine/physics/PhysicSolver.hpp>
+#include <engine/physics/Scene.hpp>
 #include <engine/WindowContextHandler.hpp>
 
 class Renderer
