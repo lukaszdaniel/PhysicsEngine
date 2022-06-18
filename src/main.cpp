@@ -1,8 +1,8 @@
-#include "engine/window_context_handler.hpp"
-#include "engine/physics/physics.hpp"
-#include "renderer.hpp"
-#include "wind.hpp"
-#include "utils.hpp"
+#include <engine/WindowContextHandler.hpp>
+#include <engine/physics/PhysicSolver.hpp>
+#include <Renderer.hpp>
+#include <wind.hpp>
+#include <utils.hpp>
 
 int main()
 {

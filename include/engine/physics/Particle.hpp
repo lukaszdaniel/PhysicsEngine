@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/System/Vector2.hpp>
-#include "../common/index_vector.hpp"
+#include <engine/common/index_vector.hpp>
 
 class Particle : public sf::CircleShape
 {

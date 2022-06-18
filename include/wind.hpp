@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics/Rect.hpp>
-#include "engine/physics/physics.hpp"
+#include <engine/physics/PhysicSolver.hpp>
 
 class Wind
 {

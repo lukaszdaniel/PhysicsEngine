@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
-#include "particle.hpp"
-#include "../common/math.hpp"
+#include <engine/physics/Particle.hpp>
+#include <engine/common/math.hpp>
 
 class LinkConstraint
 {

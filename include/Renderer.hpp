@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "engine/physics/physics.hpp"
-#include "engine/window_context_handler.hpp"
+#include <engine/physics/PhysicSolver.hpp>
+#include <engine/WindowContextHandler.hpp>
 
 class Renderer
 {
