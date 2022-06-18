@@ -41,7 +41,7 @@ public:
                 else
                 {
                     // If not, pin the particle
-                    m_objects[id].m_moving = false;
+                    objects(id).setMoving(false);
                 }
             }
         }
@@ -59,14 +59,14 @@ public:
     void removeBrokenLinks()
     {
         m_constraints.remove_if([](const LinkConstraint &c)
-                              { return !c.isValid(); });
+                                { return !c.isValid(); });
     }
 
     void applyGravity(const sf::Vector2f &gravity)
     {
         for (Particle &p : m_objects)
         {
-            p.m_forces += gravity * p.m_mass;
+            p.applyGravity(gravity);
         }
     }
 
@@ -74,7 +74,7 @@ public:
     {
         for (Particle &p : m_objects)
         {
-            p.m_forces -= p.m_velocity * friction_coef;
+            p.applyAirFriction(friction_coef);
         }
     }
 
@@ -114,16 +114,16 @@ public:
 
     civ::ID addParticle(sf::Vector2f position)
     {
-        const civ::ID particle_id = m_objects.emplace_back(position);
-        m_objects[particle_id].m_id = particle_id;
-        return particle_id;
+        const civ::ID new_particle_id = m_objects.emplace_back(position);
+        m_objects[new_particle_id].setID(new_particle_id);
+        return new_particle_id;
     }
 
     void addLink(civ::ID particle_1, civ::ID particle_2, float max_elongation_ratio = 1.5f)
     {
         const civ::ID link_id = m_constraints.emplace_back(m_objects.getRef(particle_1), m_objects.getRef(particle_2));
-        m_constraints[link_id].m_id = link_id;
-        m_constraints[link_id].m_max_elongation_ratio = max_elongation_ratio;
+        m_constraints[link_id].setID(link_id);
+        m_constraints[link_id].setMaxElongation(max_elongation_ratio);
     }
 
     CIVector<LinkConstraint> &constraints()

@@ -17,6 +17,17 @@ public:
         // m_rect.top += m_force.y * dt;
     }
 
+    sf::FloatRect &rect()
+    {
+        return m_rect;
+    }
+
+    sf::Vector2f force()
+    {
+        return m_force;
+    }
+
+private:
     sf::FloatRect m_rect;
     sf::Vector2f m_force;
 };
@@ -37,19 +48,25 @@ public:
             w.update(dt);
             for (Particle &p : scene.objects())
             {
-                if (w.m_rect.contains(p.m_position))
+                if (w.rect().contains(p.position()))
                 {
-                    p.m_forces += 1.0f * w.m_force / dt;
+                    p.applyForce(1.0f * w.force() / dt);
                 }
             }
 
-            if (w.m_rect.left > m_world_width)
+            if (w.rect().left > m_world_width)
             {
-                w.m_rect.left = -w.m_rect.width;
+                w.rect().left = -w.rect().width;
             }
         }
     }
 
+    std::vector<Wind> &winds()
+    {
+        return m_wind_waves;
+    }
+
+private:
     std::vector<Wind> m_wind_waves;
     float m_world_width;
 };

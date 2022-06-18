@@ -35,14 +35,8 @@ int main()
 
     // Add 2 wind waves
     WindManager wind(to<float>(window_width), 2 /* number of wind waves */);
-    wind.m_wind_waves.emplace_back(
-        sf::Vector2f(100.0f, window_height),
-        sf::Vector2f(0.0f, 0.0f),
-        sf::Vector2f(1000.0f, 0.0f));
-    wind.m_wind_waves.emplace_back(
-        sf::Vector2f(20.0f, window_height),
-        sf::Vector2f(0.0f, 0.0f),
-        sf::Vector2f(3000.0f, 0.0f));
+    wind.winds().push_back(Wind(sf::Vector2f(100.0f, window_height), sf::Vector2f(0.0f, 0.0f), sf::Vector2f(1000.0f, 0.0f)));
+    wind.winds().push_back(Wind(sf::Vector2f(20.0f, window_height), sf::Vector2f(0.0f, 0.0f), sf::Vector2f(3000.0f, 0.0f)));
 
     // Main loop
     constexpr float dt = 1.0f / 60.0f;

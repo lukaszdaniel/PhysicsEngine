@@ -18,8 +18,8 @@ public:
         for (uint32_t i(0); i < links_count; ++i)
         {
             LinkConstraint &current_link = m_scene.constraints().data[i];
-            m_va[2 * i].position = current_link.m_particle_1->m_position;
-            m_va[2 * i + 1].position = current_link.m_particle_2->m_position;
+            m_va[2 * i].position = current_link.particle_1()->position();
+            m_va[2 * i + 1].position = current_link.particle_2()->position();
         }
     }
 
