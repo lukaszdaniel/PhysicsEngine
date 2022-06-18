@@ -1,7 +1,7 @@
 #include <engine/WindowContextHandler.hpp>
 #include <engine/physics/PhysicSolver.hpp>
 #include <Renderer.hpp>
-#include <wind.hpp>
+#include <WindManager.hpp>
 #include <utils.hpp>
 
 int main()
